@@ -1,23 +1,34 @@
 # gemini-plugin-cc
 
-和 `grok-plugin-cc` / Codex 的 Claude Code 插件类似，`gemini-plugin-cc` 让你能把一部分任务顺手甩给本机的 **Antigravity CLI**（`agy`，默认走你在 `agy` 里选中的模型，本机当前是 Gemini 3.6 Flash Medium）去处理——修 bug、跑排查、写点边角代码，都可以交给它，你只需要回来看结果。这类任务不占用 Claude 的订阅额度。
+和 `grok-plugin-cc` / Codex 的 Claude Code 插件类似，`gemini-plugin-cc` 让你能把一部分任务顺手甩给本机的 **Antigravity CLI**（`agy`；不传 `--model` 时走你在 `agy` 里选中的默认模型）去处理——修 bug、跑排查、写点边角代码，都可以交给它，你只需要回来看结果。这类任务不占用 Claude 的订阅额度。
 
 技术上，这是一个 Claude Code marketplace 插件，通过 headless 模式（`agy -p ... --output-format json`）调用本机安装的 Antigravity CLI。结构上镜像 `grok_in_claude`：slash 命令、一个薄转发子代理、一个负责跟踪后台任务的 companion 运行时。
 
 ## 环境要求
 
 - Node.js 18.18+
-- 本机已安装并登录 Antigravity CLI（`agy --version` 确认已装；本机路径通常是 `%LOCALAPPDATA%\agy\bin\agy.exe`）。首次使用需运行一次 `agy` 完成 Google 登录，或设置 `GEMINI_API_KEY`。
+- 本机已安装并登录 Antigravity CLI，用 `agy --version` 确认（Windows 下默认装在 `%LOCALAPPDATA%\agy\bin\agy.exe`）。首次使用需运行一次 `agy` 完成 Google 登录，或设置 `GEMINI_API_KEY`。
+- 开发验证于 `agy` 1.1.10 – 1.1.16。
 
 ## 安装
 
-从本地克隆/检出目录安装：
+从 GitHub 安装：
 
 ```text
-/plugin marketplace add C:\Users\atlas\Desktop\gemini_in_claude
+/plugin marketplace add muxueliunian/gemini_in_claude
 /plugin install gemini@gemini-plugin-cc
 /gemini:setup
 ```
+
+或从本地克隆目录安装（把路径换成你自己的检出目录）：
+
+```text
+/plugin marketplace add <本地克隆目录的绝对路径>
+/plugin install gemini@gemini-plugin-cc
+/gemini:setup
+```
+
+装完后**重启一次 Claude Code 会话**，让 `SessionStart` 钩子生效（否则 job 不会按会话过滤）。
 
 `/gemini:setup` 会报告 Node、`agy` 二进制、登录状态是否都就绪；若有缺失会给出下一步操作提示。
 
@@ -26,7 +37,7 @@
 ```text
 /gemini:rescue fix the failing tests in src/parser
 /gemini:rescue --background do a deep investigation of the flaky test suite
-/gemini:rescue --model gemini-3.6-flash-high --effort high rewrite the parser
+/gemini:rescue --model gemini-3.7-flash-high --effort high rewrite the parser
 /gemini:status
 /gemini:status task-abc123
 /gemini:result task-abc123
@@ -37,7 +48,7 @@
 - `--resume` 会接续本次 Claude Code 会话里最近的 Gemini 会话；`--fresh` 强制开新的。两个都不传时，如果存在可续跑的会话，会问你一次。
 - `--background` 会把任务放进后台队列并 detach 一个 worker 进程；用 `/gemini:status` 看进度，用 `/gemini:result` 取最终文本。
 - 每个完成的 job 都会记录一个 Antigravity `conversation_id`。离开 Claude Code 之后，你也可以直接用 `agy --conversation <id>` 续跑。
-- `--model` 可选值（本机 `agy models` 实测）：`gemini-3.6-flash-high` / `medium` / `low`、`gemini-3.5-flash-*`、`gemini-3.1-pro-high` / `low`、`claude-sonnet-4-6`、`claude-opus-4-6-thinking`、`gpt-oss-120b-medium`。
+- `--model` 的取值由 `agy` 决定，插件不做白名单校验，**以 `agy models` 的实时输出为准**。截至 agy 1.1.16 实测：`gemini-3.7-flash-high` / `medium` / `low`、`gemini-3.6-flash-*`、`gemini-3.5-flash-*`、`gemini-3.1-pro-high` / `low`、`claude-sonnet-4-6`、`claude-opus-4-6-thinking`、`gpt-oss-120b-medium`。
 - `--effort` 仅接受 `low` | `medium` | `high`。
 
 ## 工作原理

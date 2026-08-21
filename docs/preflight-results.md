@@ -73,3 +73,30 @@ Notes:
 - Read-only: `--mode plan`.
 - Auth: `~/.gemini/oauth_creds.json` present; `GEMINI_API_KEY` is a 1.1.13 fallback.
 - `--print-timeout` default is `5m0s`; companion always passes `20m`.
+
+---
+
+## Recheck: agy 1.1.16 (2026-08-21)
+
+`agy --version` → `1.1.16`. All contract assumptions above still hold: no `--cwd`,
+no `--prompt-file`, no session-id pre-assignment, resume is `--conversation <id>`,
+`--print-timeout` still defaults to `5m0s`.
+
+### Models added since 1.1.10
+
+`agy models` now also lists the 3.7 flash tier:
+
+```
+gemini-3.7-flash-high
+gemini-3.7-flash-medium
+gemini-3.7-flash-low
+```
+
+Everything from the 1.1.10 list is still present. The companion does not keep a
+model allowlist, so new ids work without a code change.
+
+### Flags added since 1.1.10
+
+- `--add-dir <dir>` — add another directory to the workspace (repeatable).
+- `--sandbox` — run with terminal restrictions enabled. Not used by the companion
+  today; a candidate for hardening read-only mode beyond `--mode plan`.

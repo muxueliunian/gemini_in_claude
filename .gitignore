@@ -2,3 +2,17 @@ node_modules/
 *.log
 .tmp/
 tmp/
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Claude Code 本地状态（不应进仓库）
+.claude/
+.claude-plugin/state/
+
+# 本地环境变量
+.env
+.env.*
