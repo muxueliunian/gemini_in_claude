@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "gemini",
+  "displayName": "Antigravity CLI",
+  "version": "0.1.0",
+  "description": "Use the local Antigravity CLI (agy) from Claude Code to delegate tasks.",
+  "author": {
+    "name": "atlas"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["gemini", "antigravity", "agy", "delegation", "headless"]
+}

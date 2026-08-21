@@ -1,0 +1,26 @@
+{
+  "name": "gemini-plugin-cc",
+  "description": "Delegate tasks from Claude Code to the local Antigravity CLI (agy).",
+  "owner": {
+    "name": "atlas"
+  },
+  "metadata": {
+    "description": "Delegate tasks from Claude Code to the local Antigravity CLI (agy).",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "gemini",
+      "displayName": "Antigravity CLI",
+      "description": "Use the local Antigravity CLI (agy) from Claude Code to delegate tasks (setup / rescue / status / result / cancel).",
+      "version": "0.1.0",
+      "author": {
+        "name": "atlas"
+      },
+      "license": "Apache-2.0",
+      "category": "development",
+      "tags": ["gemini", "antigravity", "agy", "delegation", "headless"],
+      "source": "./plugins/gemini"
+    }
+  ]
+}

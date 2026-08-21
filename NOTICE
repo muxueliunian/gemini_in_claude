@@ -1,0 +1,10 @@
+gemini-plugin-cc
+Copyright 2026 atlas
+
+This product includes portions derived from grok-plugin-cc
+(grok_in_claude) and, through that project, from openai/codex-plugin-cc
+(https://github.com/openai/codex-plugin-cc), licensed under the
+Apache License, Version 2.0. The derivation is structural (plugin
+layout, command surface, and job lifecycle shape); the implementation
+in this repository was written independently against the Antigravity
+CLI (`agy`).
